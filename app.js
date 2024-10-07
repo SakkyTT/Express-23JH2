@@ -5,12 +5,29 @@ const port = 3001;
 
 // cors voidaan määrittää sallimaat tietyt lähteet (origin)
 const corsOptions = {
-    origin: 'http://localhost:9000', 
+  // :3000 react
+  // :9000 PHP
+  // origin: '*', <- sallii kaikki
+    origin: 'http://localhost:3000', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
     credentials: true,
   };
 
 app.use(cors(corsOptions));
+
+app.use(express.json());
+
+// JSON
+// {
+//   "name": "John",
+//   "age": 30
+// }
+//       =>
+// JavaScript map
+// {
+//   name: 'John',
+//   age: 30
+// }
 
 // Middleware, eli koodia, joka suoritetaan jokaisen yhteyden alussa
 // esim app.use(logger()); // Kuvitteellinen logger kirjasto, joka tallentaisi kaikki requestit talteen
@@ -19,10 +36,12 @@ app.use(cors(corsOptions));
 // routes import
 const helloRoute = require('./routes/hello');
 const chatStream = require('./routes/chatStream');
+const messageRoute = require('./routes/message');
 
 // use routes
 app.use('/', helloRoute);
 app.use('/', chatStream);
+app.use('/api/messages', messageRoute);
 
 // Palvelin lähtee käyntiin
 app.listen(port, () => {
